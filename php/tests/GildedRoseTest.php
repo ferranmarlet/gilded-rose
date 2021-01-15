@@ -46,4 +46,13 @@ class GildedRoseTest extends TestCase
         $this->assertEquals($item->sell_in, -1);
         $this->assertEquals($item->quality, 4);
     }
+
+    public function testLegendaryItemPropertiesRemainTheSame(): void
+    {
+        $item = new Item('Sulfuras, Hand of Ragnaros', -1, 80);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, -1);
+        $this->assertEquals($item->quality, 80);
+    }
 }
