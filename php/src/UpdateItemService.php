@@ -12,6 +12,10 @@ class UpdateItemService
             $strategy = new UpdateLegendaryItemStrategy();
         }
 
+        if ($item->name === 'Aged Brie') {
+            $strategy = new UpdateAgingItemStrategy();
+        }
+
         $strategy::update($item);
     }
 }

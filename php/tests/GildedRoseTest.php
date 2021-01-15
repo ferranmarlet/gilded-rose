@@ -55,4 +55,31 @@ class GildedRoseTest extends TestCase
         $this->assertEquals($item->sell_in, -1);
         $this->assertEquals($item->quality, 80);
     }
+
+    public function testAgingItemQualityIncreasesWhenUpdatedAndSellinIsPositive(): void
+    {
+        $item = new Item('Aged Brie', 2, 22);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, 1);
+        $this->assertEquals($item->quality, 23);
+    }
+
+    public function testAgingItemQualityIncreasesByDoubleWhenUpdatedAndSellinIsNegative(): void
+    {
+        $item = new Item('Aged Brie', -4, 22);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, -5);
+        $this->assertEquals($item->quality, 24);
+    }
+
+    public function testAgingItemQualityCannotGoAbove50(): void
+    {
+        $item = new Item('Aged Brie', -4, 49);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, -5);
+        $this->assertEquals($item->quality, 50);
+    }
 }
