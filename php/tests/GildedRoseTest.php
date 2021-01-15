@@ -29,4 +29,21 @@ class GildedRoseTest extends TestCase
         $this->assertEquals($item->quality, 6);
     }
 
+    public function testGenericItemQualityCannotGoBelowZero(): void
+    {
+        $item = new Item('foo', 0, 0);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, -1);
+        $this->assertEquals($item->quality, 0);
+    }
+
+    public function testGenericItemQualityDecreasesDoubleWhenSellinIsZeroOrLess(): void
+    {
+        $item = new Item('foo', 0, 6);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, -1);
+        $this->assertEquals($item->quality, 4);
+    }
 }
