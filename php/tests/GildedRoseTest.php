@@ -82,4 +82,49 @@ class GildedRoseTest extends TestCase
         $this->assertEquals($item->sell_in, -5);
         $this->assertEquals($item->quality, 50);
     }
+
+    public function testBackstagingPassesItemIsGreaterThan10Days()
+    {
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 15, 22);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, 14);
+        $this->assertEquals($item->quality, 23);
+    }
+
+    public function testBackstagingPassesItemIsBetween10and5DaysShouldIncreaseQualityBy2()
+    {
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 6, 22);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, 5);
+        $this->assertEquals($item->quality, 24);
+    }
+
+    public function testBackstagingPassesItemIsBetween5and0DaysShouldIncreaseQualityBy3()
+    {
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 2, 22);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, 1);
+        $this->assertEquals($item->quality, 25);
+    }
+
+    public function testBackstagingPassesItemIsLowerThan1QualityIs0()
+    {
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 0, 22);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, -1);
+        $this->assertEquals($item->quality, 0);
+    }
+
+    public function testBackstagingPassesItemQualityCannotGoAbove50(): void
+    {
+        $item = new Item('Backstage passes to a TAFKAL80ETC concert', 2, 49);
+        UpdateItemService::execute($item);
+
+        $this->assertEquals($item->sell_in, 1);
+        $this->assertEquals($item->quality, 50);
+    }
 }

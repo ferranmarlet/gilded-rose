@@ -16,6 +16,11 @@ class UpdateItemService
             $strategy = new UpdateAgingItemStrategy();
         }
 
+        if ($item->name === 'Backstage passes to a TAFKAL80ETC concert') {
+            $strategy = new UpdateBackstagePassesItemStrategy();
+        }
+
+
         $strategy::update($item);
     }
 }
